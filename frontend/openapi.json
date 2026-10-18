@@ -1,0 +1,4292 @@
+{
+  "components": {
+    "schemas": {
+      "AddRequest": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code"
+        ],
+        "title": "AddRequest",
+        "type": "object"
+      },
+      "AlertKindOut": {
+        "properties": {
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "level": {
+            "title": "Level",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "label",
+          "level"
+        ],
+        "title": "AlertKindOut",
+        "type": "object"
+      },
+      "AlertOut": {
+        "properties": {
+          "bar_time": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bar Time"
+          },
+          "code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code"
+          },
+          "delivery": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Delivery",
+            "type": "array"
+          },
+          "evidence": {
+            "additionalProperties": true,
+            "title": "Evidence",
+            "type": "object"
+          },
+          "holding_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Holding Id"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "is_read": {
+            "title": "Is Read",
+            "type": "boolean"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "level": {
+            "title": "Level",
+            "type": "string"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "occurred_at": {
+            "format": "date-time",
+            "title": "Occurred At",
+            "type": "string"
+          },
+          "params": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Params"
+          },
+          "price": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price"
+          },
+          "rebuy_target_price": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rebuy Target Price"
+          },
+          "suggested_quantity": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Suggested Quantity"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "label",
+          "level",
+          "code",
+          "name",
+          "holding_id",
+          "occurred_at",
+          "bar_time",
+          "suggested_quantity",
+          "price",
+          "rebuy_target_price",
+          "evidence",
+          "params",
+          "is_read",
+          "delivery"
+        ],
+        "title": "AlertOut",
+        "type": "object"
+      },
+      "AlertsResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AlertOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "kinds": {
+            "items": {
+              "$ref": "#/components/schemas/AlertKindOut"
+            },
+            "title": "Kinds",
+            "type": "array"
+          },
+          "unread": {
+            "title": "Unread",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "unread",
+          "items",
+          "kinds"
+        ],
+        "title": "AlertsResponse",
+        "type": "object"
+      },
+      "BacktestRequest": {
+        "additionalProperties": false,
+        "description": "The config of a run. Without ``params`` the current settings are used.",
+        "properties": {
+          "bar_length": {
+            "$ref": "#/components/schemas/BarLength",
+            "default": "60m"
+          },
+          "compare_bar_lengths": {
+            "default": true,
+            "title": "Compare Bar Lengths",
+            "type": "boolean"
+          },
+          "cycle": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CycleOptions"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "end_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End Date"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "maxLength": 80,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "params": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SignalParams"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sensitivity": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SensitivitySpec"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "signal_quality": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SignalQualityOptions"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "start_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start Date"
+          },
+          "universe": {
+            "$ref": "#/components/schemas/UniverseOptions"
+          },
+          "walk_forward": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WalkForwardSpec"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "title": "BacktestRequest",
+        "type": "object"
+      },
+      "BarLength": {
+        "enum": [
+          "30m",
+          "60m",
+          "1d"
+        ],
+        "title": "BarLength",
+        "type": "string"
+      },
+      "Candle": {
+        "properties": {
+          "close": {
+            "title": "Close",
+            "type": "number"
+          },
+          "high": {
+            "title": "High",
+            "type": "number"
+          },
+          "is_complete": {
+            "default": true,
+            "title": "Is Complete",
+            "type": "boolean"
+          },
+          "low": {
+            "title": "Low",
+            "type": "number"
+          },
+          "open": {
+            "title": "Open",
+            "type": "number"
+          },
+          "time": {
+            "title": "Time",
+            "type": "string"
+          },
+          "volume": {
+            "title": "Volume",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "time",
+          "open",
+          "high",
+          "low",
+          "close",
+          "volume"
+        ],
+        "title": "Candle",
+        "type": "object"
+      },
+      "ChannelHealth": {
+        "properties": {
+          "configured": {
+            "title": "Configured",
+            "type": "boolean"
+          },
+          "enabled": {
+            "title": "Enabled",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "enabled",
+          "configured"
+        ],
+        "title": "ChannelHealth",
+        "type": "object"
+      },
+      "CycleOptions": {
+        "additionalProperties": false,
+        "properties": {
+          "initial_value": {
+            "default": 10000000,
+            "exclusiveMinimum": 0.0,
+            "title": "Initial Value",
+            "type": "number"
+          },
+          "max_retries": {
+            "default": 2,
+            "maximum": 10.0,
+            "minimum": 0.0,
+            "title": "Max Retries",
+            "type": "integer"
+          },
+          "max_stocks": {
+            "default": 30,
+            "maximum": 300.0,
+            "minimum": 1.0,
+            "title": "Max Stocks",
+            "type": "integer"
+          },
+          "min_sample_cycles": {
+            "default": 30,
+            "minimum": 1.0,
+            "title": "Min Sample Cycles",
+            "type": "integer"
+          },
+          "on_expiry": {
+            "default": "abandon",
+            "enum": [
+              "abandon",
+              "retry"
+            ],
+            "title": "On Expiry",
+            "type": "string"
+          },
+          "slippage": {
+            "default": 0.001,
+            "maximum": 0.05,
+            "minimum": 0.0,
+            "title": "Slippage",
+            "type": "number"
+          },
+          "slippages": {
+            "items": {
+              "type": "number"
+            },
+            "title": "Slippages",
+            "type": "array"
+          },
+          "warmup_days": {
+            "default": 5,
+            "maximum": 60.0,
+            "minimum": 0.0,
+            "title": "Warmup Days",
+            "type": "integer"
+          }
+        },
+        "title": "CycleOptions",
+        "type": "object"
+      },
+      "CycleOut": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "expires_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expires At"
+          },
+          "forced": {
+            "title": "Forced",
+            "type": "boolean"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "net_cash": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Net Cash"
+          },
+          "quantity_increase": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quantity Increase"
+          },
+          "rebought_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rebought At"
+          },
+          "rebuy_fee": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rebuy Fee"
+          },
+          "rebuy_price": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rebuy Price"
+          },
+          "rebuy_quantity": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rebuy Quantity"
+          },
+          "rebuy_target_price": {
+            "title": "Rebuy Target Price",
+            "type": "number"
+          },
+          "sell_fee": {
+            "title": "Sell Fee",
+            "type": "number"
+          },
+          "sell_price": {
+            "title": "Sell Price",
+            "type": "number"
+          },
+          "sell_quantity": {
+            "title": "Sell Quantity",
+            "type": "integer"
+          },
+          "sell_tax": {
+            "title": "Sell Tax",
+            "type": "number"
+          },
+          "sold_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sold At"
+          },
+          "state": {
+            "$ref": "#/components/schemas/CycleState"
+          }
+        },
+        "required": [
+          "id",
+          "state",
+          "sell_price",
+          "sell_quantity",
+          "rebuy_target_price",
+          "rebuy_price",
+          "rebuy_quantity",
+          "quantity_increase",
+          "net_cash",
+          "sell_fee",
+          "sell_tax",
+          "rebuy_fee",
+          "expires_at",
+          "created_at",
+          "sold_at",
+          "rebought_at",
+          "forced"
+        ],
+        "title": "CycleOut",
+        "type": "object"
+      },
+      "CycleState": {
+        "description": "매도·재매수 사이클의 상태 (PRD 5장 상태 흐름, A-7, A-13).",
+        "enum": [
+          "rebuy_wait",
+          "rebuy_done",
+          "expired",
+          "abandoned",
+          "force_closed"
+        ],
+        "title": "CycleState",
+        "type": "string"
+      },
+      "CyclesResponse": {
+        "properties": {
+          "cycles": {
+            "items": {
+              "$ref": "#/components/schemas/CycleOut"
+            },
+            "title": "Cycles",
+            "type": "array"
+          },
+          "holding_id": {
+            "title": "Holding Id",
+            "type": "integer"
+          },
+          "totals": {
+            "$ref": "#/components/schemas/TotalsOut"
+          }
+        },
+        "required": [
+          "holding_id",
+          "cycles",
+          "totals"
+        ],
+        "title": "CyclesResponse",
+        "type": "object"
+      },
+      "FillCreate": {
+        "properties": {
+          "fee": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fee"
+          },
+          "filled_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Filled At"
+          },
+          "forced": {
+            "default": false,
+            "title": "Forced",
+            "type": "boolean"
+          },
+          "price": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Price"
+          },
+          "quantity": {
+            "exclusiveMinimum": 0.0,
+            "title": "Quantity",
+            "type": "integer"
+          },
+          "side": {
+            "$ref": "#/components/schemas/FillSide"
+          },
+          "tax": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tax"
+          }
+        },
+        "required": [
+          "side",
+          "price",
+          "quantity"
+        ],
+        "title": "FillCreate",
+        "type": "object"
+      },
+      "FillOut": {
+        "properties": {
+          "fee": {
+            "title": "Fee",
+            "type": "number"
+          },
+          "filled_at": {
+            "format": "date-time",
+            "title": "Filled At",
+            "type": "string"
+          },
+          "forced": {
+            "title": "Forced",
+            "type": "boolean"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "price": {
+            "title": "Price",
+            "type": "number"
+          },
+          "quantity": {
+            "title": "Quantity",
+            "type": "integer"
+          },
+          "side": {
+            "$ref": "#/components/schemas/FillSide"
+          },
+          "tax": {
+            "title": "Tax",
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "side",
+          "price",
+          "quantity",
+          "filled_at",
+          "fee",
+          "tax",
+          "forced"
+        ],
+        "title": "FillOut",
+        "type": "object"
+      },
+      "FillResponse": {
+        "properties": {
+          "cycle": {
+            "$ref": "#/components/schemas/CycleOut"
+          },
+          "fill": {
+            "$ref": "#/components/schemas/FillOut"
+          },
+          "holding": {
+            "$ref": "#/components/schemas/HoldingOut"
+          }
+        },
+        "required": [
+          "fill",
+          "cycle",
+          "holding"
+        ],
+        "title": "FillResponse",
+        "type": "object"
+      },
+      "FillSide": {
+        "enum": [
+          "sell",
+          "rebuy"
+        ],
+        "title": "FillSide",
+        "type": "string"
+      },
+      "FlowPoint": {
+        "properties": {
+          "date": {
+            "title": "Date",
+            "type": "string"
+          },
+          "foreign_net_buy": {
+            "title": "Foreign Net Buy",
+            "type": "integer"
+          },
+          "institution_net_buy": {
+            "title": "Institution Net Buy",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "date",
+          "foreign_net_buy",
+          "institution_net_buy"
+        ],
+        "title": "FlowPoint",
+        "type": "object"
+      },
+      "ForceSellParams": {
+        "additionalProperties": false,
+        "description": "A-13 5일선 이탈 강제 매도.",
+        "properties": {
+          "ma_long_window": {
+            "default": 20,
+            "minimum": 2.0,
+            "title": "Ma Long Window",
+            "type": "integer"
+          },
+          "ma_short_window": {
+            "default": 5,
+            "minimum": 1.0,
+            "title": "Ma Short Window",
+            "type": "integer"
+          }
+        },
+        "title": "ForceSellParams",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "HealthResponse": {
+        "properties": {
+          "channels": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ChannelHealth"
+            },
+            "default": {},
+            "title": "Channels",
+            "type": "object"
+          },
+          "collection": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/SourceHealth"
+            },
+            "default": {},
+            "title": "Collection",
+            "type": "object"
+          },
+          "db": {
+            "enum": [
+              "ok",
+              "error"
+            ],
+            "title": "Db",
+            "type": "string"
+          },
+          "last_daily_update": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Daily Update"
+          },
+          "last_intraday_update": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Intraday Update"
+          },
+          "last_quote_update": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Quote Update"
+          },
+          "latest_daily_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latest Daily Date"
+          },
+          "latest_intraday_bar": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latest Intraday Bar"
+          },
+          "scheduler": {
+            "default": "disabled",
+            "enum": [
+              "running",
+              "disabled"
+            ],
+            "title": "Scheduler",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "ok",
+              "degraded",
+              "error"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "warnings": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/HealthWarning"
+            },
+            "title": "Warnings",
+            "type": "array"
+          }
+        },
+        "required": [
+          "status",
+          "db"
+        ],
+        "title": "HealthResponse",
+        "type": "object"
+      },
+      "HealthWarning": {
+        "properties": {
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          }
+        },
+        "required": [
+          "source",
+          "message"
+        ],
+        "title": "HealthWarning",
+        "type": "object"
+      },
+      "HoldingCreate": {
+        "properties": {
+          "avg_price": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Avg Price"
+          },
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "quantity": {
+            "exclusiveMinimum": 0.0,
+            "title": "Quantity",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "code",
+          "quantity",
+          "avg_price"
+        ],
+        "title": "HoldingCreate",
+        "type": "object"
+      },
+      "HoldingOut": {
+        "properties": {
+          "avg_price": {
+            "title": "Avg Price",
+            "type": "number"
+          },
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "cumulative_increase": {
+            "title": "Cumulative Increase",
+            "type": "integer"
+          },
+          "daily_downtrend": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Daily Downtrend"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "last_close": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Close"
+          },
+          "market": {
+            "title": "Market",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "open_cycle": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CycleOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "quantity": {
+            "title": "Quantity",
+            "type": "integer"
+          },
+          "start_quantity": {
+            "title": "Start Quantity",
+            "type": "integer"
+          },
+          "state": {
+            "$ref": "#/components/schemas/HoldingState"
+          },
+          "stop_price": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stop Price"
+          },
+          "unrecovered_quantity": {
+            "title": "Unrecovered Quantity",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "name",
+          "market",
+          "quantity",
+          "start_quantity",
+          "avg_price",
+          "state",
+          "open_cycle",
+          "last_close",
+          "daily_downtrend",
+          "stop_price",
+          "cumulative_increase",
+          "unrecovered_quantity"
+        ],
+        "title": "HoldingOut",
+        "type": "object"
+      },
+      "HoldingState": {
+        "description": "보유 종목 한 건의 상태 (PRD 5장, 7장 보유 종목 표).",
+        "enum": [
+          "holding",
+          "rebuy_wait",
+          "expired"
+        ],
+        "title": "HoldingState",
+        "type": "string"
+      },
+      "HoldingUpdate": {
+        "properties": {
+          "avg_price": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Avg Price"
+          },
+          "quantity": {
+            "minimum": 0.0,
+            "title": "Quantity",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "quantity",
+          "avg_price"
+        ],
+        "title": "HoldingUpdate",
+        "type": "object"
+      },
+      "IndicatorParams": {
+        "additionalProperties": false,
+        "description": "공통 지표 (스크리너·분봉).",
+        "properties": {
+          "atr_period": {
+            "default": 14,
+            "minimum": 1.0,
+            "title": "Atr Period",
+            "type": "integer"
+          },
+          "bollinger_k": {
+            "default": 2.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Bollinger K",
+            "type": "number"
+          },
+          "bollinger_window": {
+            "default": 20,
+            "minimum": 2.0,
+            "title": "Bollinger Window",
+            "type": "integer"
+          },
+          "macd_fast": {
+            "default": 12,
+            "minimum": 1.0,
+            "title": "Macd Fast",
+            "type": "integer"
+          },
+          "macd_signal": {
+            "default": 9,
+            "minimum": 1.0,
+            "title": "Macd Signal",
+            "type": "integer"
+          },
+          "macd_slow": {
+            "default": 26,
+            "minimum": 2.0,
+            "title": "Macd Slow",
+            "type": "integer"
+          },
+          "rsi_period": {
+            "default": 14,
+            "minimum": 2.0,
+            "title": "Rsi Period",
+            "type": "integer"
+          }
+        },
+        "title": "IndicatorParams",
+        "type": "object"
+      },
+      "IndicatorPoint": {
+        "properties": {
+          "atr": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Atr"
+          },
+          "bandwidth": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bandwidth"
+          },
+          "bb_lower": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bb Lower"
+          },
+          "bb_mid": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bb Mid"
+          },
+          "bb_upper": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bb Upper"
+          },
+          "macd": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Macd"
+          },
+          "macd_hist": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Macd Hist"
+          },
+          "macd_signal": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Macd Signal"
+          },
+          "obv": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Obv"
+          },
+          "pct_b": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pct B"
+          },
+          "rsi": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rsi"
+          },
+          "time": {
+            "title": "Time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "time",
+          "rsi",
+          "macd",
+          "macd_signal",
+          "macd_hist",
+          "bb_lower",
+          "bb_mid",
+          "bb_upper",
+          "pct_b",
+          "bandwidth",
+          "obv",
+          "atr"
+        ],
+        "title": "IndicatorPoint",
+        "type": "object"
+      },
+      "IndicatorsResponse": {
+        "properties": {
+          "bar": {
+            "$ref": "#/components/schemas/BarLength"
+          },
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "flow": {
+            "items": {
+              "$ref": "#/components/schemas/FlowPoint"
+            },
+            "title": "Flow",
+            "type": "array"
+          },
+          "points": {
+            "items": {
+              "$ref": "#/components/schemas/IndicatorPoint"
+            },
+            "title": "Points",
+            "type": "array"
+          }
+        },
+        "required": [
+          "code",
+          "bar",
+          "points",
+          "flow"
+        ],
+        "title": "IndicatorsResponse",
+        "type": "object"
+      },
+      "LoginRequest": {
+        "properties": {
+          "password": {
+            "title": "Password",
+            "type": "string"
+          },
+          "username": {
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username",
+          "password"
+        ],
+        "title": "LoginRequest",
+        "type": "object"
+      },
+      "ParamAxis": {
+        "additionalProperties": false,
+        "description": "One parameter and the values to try, e.g. ``rebuy.target_gain`` = 0.005, 0.01, 0.015.",
+        "properties": {
+          "path": {
+            "title": "Path",
+            "type": "string"
+          },
+          "values": {
+            "items": {
+              "type": "number"
+            },
+            "maxItems": 15,
+            "minItems": 2,
+            "title": "Values",
+            "type": "array"
+          }
+        },
+        "required": [
+          "path",
+          "values"
+        ],
+        "title": "ParamAxis",
+        "type": "object"
+      },
+      "PresetCreate": {
+        "properties": {
+          "name": {
+            "maxLength": 40,
+            "minLength": 1,
+            "pattern": "^[^/\\\\]+$",
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "PresetCreate",
+        "type": "object"
+      },
+      "PresetInfo": {
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "updated_at"
+        ],
+        "title": "PresetInfo",
+        "type": "object"
+      },
+      "PresetRequest": {
+        "properties": {
+          "apply": {
+            "default": false,
+            "title": "Apply",
+            "type": "boolean"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "maxLength": 40,
+                "minLength": 1,
+                "pattern": "^[^/\\\\]+$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          }
+        },
+        "title": "PresetRequest",
+        "type": "object"
+      },
+      "PresetResult": {
+        "properties": {
+          "applied": {
+            "title": "Applied",
+            "type": "boolean"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "applied"
+        ],
+        "title": "PresetResult",
+        "type": "object"
+      },
+      "RebuyParams": {
+        "additionalProperties": false,
+        "description": "재매수 신호 (분봉 + 일봉 수급)와 재매수 목표가.",
+        "properties": {
+          "bollinger_support_level": {
+            "default": 0.0,
+            "title": "Bollinger Support Level",
+            "type": "number"
+          },
+          "expiry_trading_days": {
+            "default": 5,
+            "minimum": 1.0,
+            "title": "Expiry Trading Days",
+            "type": "integer"
+          },
+          "min_confirmations": {
+            "default": 2,
+            "minimum": 1.0,
+            "title": "Min Confirmations",
+            "type": "integer"
+          },
+          "round_trip_fee_rate": {
+            "default": 0.0003,
+            "minimum": 0.0,
+            "title": "Round Trip Fee Rate",
+            "type": "number"
+          },
+          "rsi_rebound_high": {
+            "default": 50.0,
+            "title": "Rsi Rebound High",
+            "type": "number"
+          },
+          "rsi_rebound_low": {
+            "default": 30.0,
+            "title": "Rsi Rebound Low",
+            "type": "number"
+          },
+          "sell_tax_rate": {
+            "default": 0.0018,
+            "minimum": 0.0,
+            "title": "Sell Tax Rate",
+            "type": "number"
+          },
+          "target_gain": {
+            "default": 0.01,
+            "minimum": 0.0,
+            "title": "Target Gain",
+            "type": "number"
+          }
+        },
+        "title": "RebuyParams",
+        "type": "object"
+      },
+      "ResultItem": {
+        "properties": {
+          "change_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Change Pct"
+          },
+          "close": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Close"
+          },
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "evidence": {
+            "additionalProperties": true,
+            "title": "Evidence",
+            "type": "object"
+          },
+          "flow_unreflected": {
+            "title": "Flow Unreflected",
+            "type": "boolean"
+          },
+          "in_watchlist": {
+            "title": "In Watchlist",
+            "type": "boolean"
+          },
+          "market": {
+            "title": "Market",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "score": {
+            "title": "Score",
+            "type": "number"
+          },
+          "tags": {
+            "items": {
+              "$ref": "#/components/schemas/TagOut"
+            },
+            "title": "Tags",
+            "type": "array"
+          },
+          "trading_value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trading Value"
+          }
+        },
+        "required": [
+          "code",
+          "name",
+          "market",
+          "score",
+          "tags",
+          "close",
+          "change_pct",
+          "trading_value",
+          "flow_unreflected",
+          "in_watchlist",
+          "evidence"
+        ],
+        "title": "ResultItem",
+        "type": "object"
+      },
+      "ResultsResponse": {
+        "properties": {
+          "gate": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gate"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ResultItem"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "scan_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scan Date"
+          },
+          "scan_dates": {
+            "items": {
+              "format": "date",
+              "type": "string"
+            },
+            "title": "Scan Dates",
+            "type": "array"
+          }
+        },
+        "required": [
+          "scan_date",
+          "scan_dates",
+          "gate",
+          "items"
+        ],
+        "title": "ResultsResponse",
+        "type": "object"
+      },
+      "RunOut": {
+        "properties": {
+          "bar_length": {
+            "title": "Bar Length",
+            "type": "string"
+          },
+          "detail": {
+            "additionalProperties": true,
+            "title": "Detail",
+            "type": "object"
+          },
+          "end_date": {
+            "format": "date",
+            "title": "End Date",
+            "type": "string"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "executed_at": {
+            "format": "date-time",
+            "title": "Executed At",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "params": {
+            "additionalProperties": true,
+            "title": "Params",
+            "type": "object"
+          },
+          "progress": {
+            "title": "Progress",
+            "type": "number"
+          },
+          "start_date": {
+            "format": "date",
+            "title": "Start Date",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "summary": {
+            "additionalProperties": true,
+            "title": "Summary",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "status",
+          "progress",
+          "executed_at",
+          "start_date",
+          "end_date",
+          "bar_length",
+          "summary",
+          "error",
+          "params",
+          "detail"
+        ],
+        "title": "RunOut",
+        "type": "object"
+      },
+      "RunRequest": {
+        "properties": {
+          "params": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SignalParams"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "scan_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scan Date"
+          }
+        },
+        "title": "RunRequest",
+        "type": "object"
+      },
+      "RunResponse": {
+        "properties": {
+          "drawdown_threshold_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Drawdown Threshold Pct"
+          },
+          "elapsed_seconds": {
+            "title": "Elapsed Seconds",
+            "type": "number"
+          },
+          "gate_mode": {
+            "title": "Gate Mode",
+            "type": "string"
+          },
+          "gated": {
+            "title": "Gated",
+            "type": "integer"
+          },
+          "saved": {
+            "title": "Saved",
+            "type": "integer"
+          },
+          "scan_date": {
+            "format": "date",
+            "title": "Scan Date",
+            "type": "string"
+          },
+          "universe_size": {
+            "title": "Universe Size",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "scan_date",
+          "universe_size",
+          "gate_mode",
+          "drawdown_threshold_pct",
+          "gated",
+          "saved",
+          "elapsed_seconds"
+        ],
+        "title": "RunResponse",
+        "type": "object"
+      },
+      "RunSummaryOut": {
+        "properties": {
+          "bar_length": {
+            "title": "Bar Length",
+            "type": "string"
+          },
+          "end_date": {
+            "format": "date",
+            "title": "End Date",
+            "type": "string"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "executed_at": {
+            "format": "date-time",
+            "title": "Executed At",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "progress": {
+            "title": "Progress",
+            "type": "number"
+          },
+          "start_date": {
+            "format": "date",
+            "title": "Start Date",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "summary": {
+            "additionalProperties": true,
+            "title": "Summary",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "status",
+          "progress",
+          "executed_at",
+          "start_date",
+          "end_date",
+          "bar_length",
+          "summary",
+          "error"
+        ],
+        "title": "RunSummaryOut",
+        "type": "object"
+      },
+      "ScanParams": {
+        "additionalProperties": false,
+        "description": "스캔 결과 선택 옵션 (S-2, S-6).",
+        "properties": {
+          "decline_rank_top_n": {
+            "default": 10,
+            "minimum": 1.0,
+            "title": "Decline Rank Top N",
+            "type": "integer"
+          },
+          "few_candidates_action": {
+            "default": "none",
+            "enum": [
+              "none",
+              "relax_drawdown",
+              "rank_by_decline"
+            ],
+            "title": "Few Candidates Action",
+            "type": "string"
+          },
+          "few_candidates_threshold": {
+            "default": 5,
+            "minimum": 1.0,
+            "title": "Few Candidates Threshold",
+            "type": "integer"
+          },
+          "min_score": {
+            "default": 0.0,
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Min Score",
+            "type": "number"
+          }
+        },
+        "title": "ScanParams",
+        "type": "object"
+      },
+      "ScoreParams": {
+        "additionalProperties": false,
+        "description": "스크리너 배점 (초안, S-6: 화면에서 바꿀 수 있다).\n\nEach section's weight is split equally over its signals (반전 3개, 확인 5개, 수급 4개).\n거래량 earns ``volume_points`` at 3x and ``volume_points * volume_multiple_points /\nvolume_strong_multiple_points`` (14 of 20) at 2x. The total is always shown on a 0-100\nscale: the earned points are divided by the sum of the weights that applied.",
+        "properties": {
+          "confirmation_points": {
+            "default": 30,
+            "minimum": 0.0,
+            "title": "Confirmation Points",
+            "type": "number"
+          },
+          "flow_points": {
+            "default": 20,
+            "minimum": 0.0,
+            "title": "Flow Points",
+            "type": "number"
+          },
+          "reversal_points": {
+            "default": 30,
+            "minimum": 0.0,
+            "title": "Reversal Points",
+            "type": "number"
+          },
+          "volume_multiple_points": {
+            "default": 14,
+            "minimum": 0.0,
+            "title": "Volume Multiple Points",
+            "type": "number"
+          },
+          "volume_points": {
+            "default": 20,
+            "minimum": 0.0,
+            "title": "Volume Points",
+            "type": "number"
+          },
+          "volume_strong_multiple_points": {
+            "default": 20,
+            "exclusiveMinimum": 0.0,
+            "title": "Volume Strong Multiple Points",
+            "type": "number"
+          }
+        },
+        "title": "ScoreParams",
+        "type": "object"
+      },
+      "ScreenerParams": {
+        "additionalProperties": false,
+        "description": "스크리너 신호 (일봉).",
+        "properties": {
+          "bollinger_break_lookback": {
+            "default": 10,
+            "minimum": 1.0,
+            "title": "Bollinger Break Lookback",
+            "type": "integer"
+          },
+          "disparity_threshold_pct": {
+            "default": -8.0,
+            "title": "Disparity Threshold Pct",
+            "type": "number"
+          },
+          "disparity_window": {
+            "default": 20,
+            "minimum": 2.0,
+            "title": "Disparity Window",
+            "type": "integer"
+          },
+          "divergence_lookback": {
+            "default": 30,
+            "minimum": 2.0,
+            "title": "Divergence Lookback",
+            "type": "integer"
+          },
+          "drawdown_relaxed_threshold_pct": {
+            "default": -20.0,
+            "title": "Drawdown Relaxed Threshold Pct",
+            "type": "number"
+          },
+          "drawdown_threshold_pct": {
+            "default": -30.0,
+            "title": "Drawdown Threshold Pct",
+            "type": "number"
+          },
+          "drawdown_window": {
+            "default": 252,
+            "minimum": 2.0,
+            "title": "Drawdown Window",
+            "type": "integer"
+          },
+          "flow_consecutive_days": {
+            "default": 3,
+            "minimum": 1.0,
+            "title": "Flow Consecutive Days",
+            "type": "integer"
+          },
+          "flow_strength_threshold_pct": {
+            "default": 2.0,
+            "title": "Flow Strength Threshold Pct",
+            "type": "number"
+          },
+          "flow_strength_window": {
+            "default": 5,
+            "minimum": 1.0,
+            "title": "Flow Strength Window",
+            "type": "integer"
+          },
+          "flow_turnaround_window": {
+            "default": 5,
+            "minimum": 1.0,
+            "title": "Flow Turnaround Window",
+            "type": "integer"
+          },
+          "liquidity_window": {
+            "default": 20,
+            "minimum": 1.0,
+            "title": "Liquidity Window",
+            "type": "integer"
+          },
+          "ma_long_window": {
+            "default": 20,
+            "minimum": 2.0,
+            "title": "Ma Long Window",
+            "type": "integer"
+          },
+          "ma_short_window": {
+            "default": 5,
+            "minimum": 1.0,
+            "title": "Ma Short Window",
+            "type": "integer"
+          },
+          "macd_cross_below_zero_only": {
+            "default": false,
+            "title": "Macd Cross Below Zero Only",
+            "type": "boolean"
+          },
+          "min_avg_trading_value": {
+            "default": 1000000000,
+            "minimum": 0.0,
+            "title": "Min Avg Trading Value",
+            "type": "integer"
+          },
+          "obv_ma_window": {
+            "default": 20,
+            "minimum": 2.0,
+            "title": "Obv Ma Window",
+            "type": "integer"
+          },
+          "rsi_cross_level": {
+            "default": 30.0,
+            "title": "Rsi Cross Level",
+            "type": "number"
+          },
+          "swing_confirm_bars": {
+            "default": 3,
+            "minimum": 1.0,
+            "title": "Swing Confirm Bars",
+            "type": "integer"
+          },
+          "volume_multiple": {
+            "default": 2.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Volume Multiple",
+            "type": "number"
+          },
+          "volume_strong_multiple": {
+            "default": 3.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Volume Strong Multiple",
+            "type": "number"
+          },
+          "volume_window": {
+            "default": 20,
+            "minimum": 1.0,
+            "title": "Volume Window",
+            "type": "integer"
+          }
+        },
+        "title": "ScreenerParams",
+        "type": "object"
+      },
+      "SellParams": {
+        "additionalProperties": false,
+        "description": "매도 신호 (분봉 + 일봉 수급).",
+        "properties": {
+          "atr_disparity_multiple": {
+            "default": 3.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Atr Disparity Multiple",
+            "type": "number"
+          },
+          "atr_disparity_window": {
+            "default": 20,
+            "minimum": 2.0,
+            "title": "Atr Disparity Window",
+            "type": "integer"
+          },
+          "bollinger_upper_level": {
+            "default": 1.0,
+            "title": "Bollinger Upper Level",
+            "type": "number"
+          },
+          "divergence_lookback": {
+            "default": 30,
+            "minimum": 2.0,
+            "title": "Divergence Lookback",
+            "type": "integer"
+          },
+          "flow_exit_days": {
+            "default": 3,
+            "minimum": 1.0,
+            "title": "Flow Exit Days",
+            "type": "integer"
+          },
+          "macd_weak_bars": {
+            "default": 2,
+            "minimum": 1.0,
+            "title": "Macd Weak Bars",
+            "type": "integer"
+          },
+          "min_overlap": {
+            "default": 2,
+            "minimum": 1.0,
+            "title": "Min Overlap",
+            "type": "integer"
+          },
+          "rsi_overbought": {
+            "default": 70.0,
+            "title": "Rsi Overbought",
+            "type": "number"
+          },
+          "sell_fraction": {
+            "default": 0.3333333333333333,
+            "exclusiveMaximum": 1.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Sell Fraction",
+            "type": "number"
+          },
+          "swing_confirm_bars": {
+            "default": 3,
+            "minimum": 1.0,
+            "title": "Swing Confirm Bars",
+            "type": "integer"
+          }
+        },
+        "title": "SellParams",
+        "type": "object"
+      },
+      "SensitivitySpec": {
+        "additionalProperties": false,
+        "properties": {
+          "metric": {
+            "default": "mean_increase_rate",
+            "title": "Metric",
+            "type": "string"
+          },
+          "target": {
+            "default": "cycle",
+            "enum": [
+              "cycle",
+              "signal_quality"
+            ],
+            "title": "Target",
+            "type": "string"
+          },
+          "x": {
+            "$ref": "#/components/schemas/ParamAxis"
+          },
+          "y": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ParamAxis"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "x"
+        ],
+        "title": "SensitivitySpec",
+        "type": "object"
+      },
+      "SettingsDocument": {
+        "description": "Everything the settings screen edits. ``PUT`` replaces it as a whole.",
+        "properties": {
+          "alert_cooldown_bars": {
+            "maximum": 500.0,
+            "minimum": 0.0,
+            "title": "Alert Cooldown Bars",
+            "type": "integer"
+          },
+          "channels": {
+            "additionalProperties": {
+              "type": "boolean"
+            },
+            "title": "Channels",
+            "type": "object"
+          },
+          "refresh_seconds": {
+            "title": "Refresh Seconds",
+            "type": "integer"
+          },
+          "signal_bar_length": {
+            "$ref": "#/components/schemas/BarLength"
+          },
+          "signal_params": {
+            "$ref": "#/components/schemas/SignalParams"
+          }
+        },
+        "required": [
+          "signal_params",
+          "signal_bar_length",
+          "alert_cooldown_bars",
+          "channels",
+          "refresh_seconds"
+        ],
+        "title": "SettingsDocument",
+        "type": "object"
+      },
+      "SettingsResponse": {
+        "properties": {
+          "alert_cooldown_bars": {
+            "maximum": 500.0,
+            "minimum": 0.0,
+            "title": "Alert Cooldown Bars",
+            "type": "integer"
+          },
+          "channels": {
+            "additionalProperties": {
+              "type": "boolean"
+            },
+            "title": "Channels",
+            "type": "object"
+          },
+          "presets": {
+            "items": {
+              "$ref": "#/components/schemas/PresetInfo"
+            },
+            "title": "Presets",
+            "type": "array"
+          },
+          "refresh_seconds": {
+            "title": "Refresh Seconds",
+            "type": "integer"
+          },
+          "signal_bar_length": {
+            "$ref": "#/components/schemas/BarLength"
+          },
+          "signal_params": {
+            "$ref": "#/components/schemas/SignalParams"
+          }
+        },
+        "required": [
+          "signal_params",
+          "signal_bar_length",
+          "alert_cooldown_bars",
+          "channels",
+          "refresh_seconds",
+          "presets"
+        ],
+        "title": "SettingsResponse",
+        "type": "object"
+      },
+      "SignalParams": {
+        "additionalProperties": false,
+        "properties": {
+          "force_sell": {
+            "$ref": "#/components/schemas/ForceSellParams",
+            "default": {
+              "ma_long_window": 20,
+              "ma_short_window": 5
+            }
+          },
+          "indicators": {
+            "$ref": "#/components/schemas/IndicatorParams",
+            "default": {
+              "atr_period": 14,
+              "bollinger_k": 2.0,
+              "bollinger_window": 20,
+              "macd_fast": 12,
+              "macd_signal": 9,
+              "macd_slow": 26,
+              "rsi_period": 14
+            }
+          },
+          "rebuy": {
+            "$ref": "#/components/schemas/RebuyParams",
+            "default": {
+              "bollinger_support_level": 0.0,
+              "expiry_trading_days": 5,
+              "min_confirmations": 2,
+              "round_trip_fee_rate": 0.0003,
+              "rsi_rebound_high": 50.0,
+              "rsi_rebound_low": 30.0,
+              "sell_tax_rate": 0.0018,
+              "target_gain": 0.01
+            }
+          },
+          "scan": {
+            "$ref": "#/components/schemas/ScanParams",
+            "default": {
+              "decline_rank_top_n": 10,
+              "few_candidates_action": "none",
+              "few_candidates_threshold": 5,
+              "min_score": 0.0
+            }
+          },
+          "score": {
+            "$ref": "#/components/schemas/ScoreParams",
+            "default": {
+              "confirmation_points": 30.0,
+              "flow_points": 20.0,
+              "reversal_points": 30.0,
+              "volume_multiple_points": 14.0,
+              "volume_points": 20.0,
+              "volume_strong_multiple_points": 20.0
+            }
+          },
+          "screener": {
+            "$ref": "#/components/schemas/ScreenerParams",
+            "default": {
+              "bollinger_break_lookback": 10,
+              "disparity_threshold_pct": -8.0,
+              "disparity_window": 20,
+              "divergence_lookback": 30,
+              "drawdown_relaxed_threshold_pct": -20.0,
+              "drawdown_threshold_pct": -30.0,
+              "drawdown_window": 252,
+              "flow_consecutive_days": 3,
+              "flow_strength_threshold_pct": 2.0,
+              "flow_strength_window": 5,
+              "flow_turnaround_window": 5,
+              "liquidity_window": 20,
+              "ma_long_window": 20,
+              "ma_short_window": 5,
+              "macd_cross_below_zero_only": false,
+              "min_avg_trading_value": 1000000000,
+              "obv_ma_window": 20,
+              "rsi_cross_level": 30.0,
+              "swing_confirm_bars": 3,
+              "volume_multiple": 2.0,
+              "volume_strong_multiple": 3.0,
+              "volume_window": 20
+            }
+          },
+          "sell": {
+            "$ref": "#/components/schemas/SellParams",
+            "default": {
+              "atr_disparity_multiple": 3.0,
+              "atr_disparity_window": 20,
+              "bollinger_upper_level": 1.0,
+              "divergence_lookback": 30,
+              "flow_exit_days": 3,
+              "macd_weak_bars": 2,
+              "min_overlap": 2,
+              "rsi_overbought": 70.0,
+              "sell_fraction": 0.3333333333333333,
+              "swing_confirm_bars": 3
+            }
+          },
+          "stop": {
+            "$ref": "#/components/schemas/StopParams",
+            "default": {
+              "atr_multiple": 2.0
+            }
+          },
+          "trend": {
+            "$ref": "#/components/schemas/TrendParams",
+            "default": {
+              "ma_window": 60,
+              "slope_bars": 5
+            }
+          }
+        },
+        "title": "SignalParams",
+        "type": "object"
+      },
+      "SignalQualityOptions": {
+        "additionalProperties": false,
+        "properties": {
+          "engine": {
+            "default": "auto",
+            "enum": [
+              "auto",
+              "vectorbt",
+              "pandas"
+            ],
+            "title": "Engine",
+            "type": "string"
+          },
+          "horizons": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Horizons",
+            "type": "array"
+          },
+          "min_sample_dates": {
+            "default": 30,
+            "minimum": 1.0,
+            "title": "Min Sample Dates",
+            "type": "integer"
+          },
+          "primary_horizon": {
+            "default": 5,
+            "title": "Primary Horizon",
+            "type": "integer"
+          },
+          "random_trials": {
+            "default": 20,
+            "maximum": 200.0,
+            "minimum": 1.0,
+            "title": "Random Trials",
+            "type": "integer"
+          },
+          "seed": {
+            "default": 7,
+            "title": "Seed",
+            "type": "integer"
+          },
+          "slippages": {
+            "items": {
+              "type": "number"
+            },
+            "title": "Slippages",
+            "type": "array"
+          }
+        },
+        "title": "SignalQualityOptions",
+        "type": "object"
+      },
+      "SourceHealth": {
+        "properties": {
+          "last_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Error"
+          },
+          "last_success": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Success"
+          },
+          "stale": {
+            "title": "Stale",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "stale",
+          "last_success",
+          "last_error"
+        ],
+        "title": "SourceHealth",
+        "type": "object"
+      },
+      "StopParams": {
+        "additionalProperties": false,
+        "description": "A-8 ATR 기반 손절선 (PRD 6장 표 밖, 사용자 확인 정의).",
+        "properties": {
+          "atr_multiple": {
+            "default": 2.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Atr Multiple",
+            "type": "number"
+          }
+        },
+        "title": "StopParams",
+        "type": "object"
+      },
+      "TagOut": {
+        "properties": {
+          "key": {
+            "title": "Key",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "label"
+        ],
+        "title": "TagOut",
+        "type": "object"
+      },
+      "TestResponse": {
+        "properties": {
+          "channels": {
+            "items": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "title": "Channels",
+            "type": "array"
+          }
+        },
+        "required": [
+          "channels"
+        ],
+        "title": "TestResponse",
+        "type": "object"
+      },
+      "TotalsOut": {
+        "properties": {
+          "completed": {
+            "title": "Completed",
+            "type": "integer"
+          },
+          "cumulative_increase": {
+            "title": "Cumulative Increase",
+            "type": "integer"
+          },
+          "current_quantity": {
+            "title": "Current Quantity",
+            "type": "integer"
+          },
+          "cycles": {
+            "title": "Cycles",
+            "type": "integer"
+          },
+          "pending_quantity": {
+            "title": "Pending Quantity",
+            "type": "integer"
+          },
+          "start_quantity": {
+            "title": "Start Quantity",
+            "type": "integer"
+          },
+          "successful": {
+            "title": "Successful",
+            "type": "integer"
+          },
+          "unrecovered_quantity": {
+            "title": "Unrecovered Quantity",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "cycles",
+          "completed",
+          "successful",
+          "cumulative_increase",
+          "unrecovered_quantity",
+          "pending_quantity",
+          "start_quantity",
+          "current_quantity"
+        ],
+        "title": "TotalsOut",
+        "type": "object"
+      },
+      "TrendParams": {
+        "additionalProperties": false,
+        "description": "A-6 일봉 추세 필터 (PRD 6장 표 밖, 사용자 확인 정의).",
+        "properties": {
+          "ma_window": {
+            "default": 60,
+            "minimum": 2.0,
+            "title": "Ma Window",
+            "type": "integer"
+          },
+          "slope_bars": {
+            "default": 5,
+            "minimum": 1.0,
+            "title": "Slope Bars",
+            "type": "integer"
+          }
+        },
+        "title": "TrendParams",
+        "type": "object"
+      },
+      "UniverseOptions": {
+        "additionalProperties": false,
+        "description": "PRD 10장 데이터: how the universe is built and whether failed companies are in it.",
+        "properties": {
+          "include_delisted": {
+            "default": true,
+            "title": "Include Delisted",
+            "type": "boolean"
+          },
+          "point_in_time": {
+            "default": true,
+            "title": "Point In Time",
+            "type": "boolean"
+          }
+        },
+        "title": "UniverseOptions",
+        "type": "object"
+      },
+      "UserResponse": {
+        "properties": {
+          "username": {
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username"
+        ],
+        "title": "UserResponse",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      },
+      "WalkForwardSpec": {
+        "additionalProperties": false,
+        "description": "Pick the best value of ``param`` on each training window, then judge it on the next one.",
+        "properties": {
+          "metric": {
+            "default": "median_return",
+            "title": "Metric",
+            "type": "string"
+          },
+          "min_samples": {
+            "default": 10,
+            "minimum": 1.0,
+            "title": "Min Samples",
+            "type": "integer"
+          },
+          "param": {
+            "$ref": "#/components/schemas/ParamAxis"
+          },
+          "step_days": {
+            "default": 40,
+            "minimum": 5.0,
+            "title": "Step Days",
+            "type": "integer"
+          },
+          "target": {
+            "default": "signal_quality",
+            "enum": [
+              "cycle",
+              "signal_quality"
+            ],
+            "title": "Target",
+            "type": "string"
+          },
+          "test_days": {
+            "default": 40,
+            "minimum": 5.0,
+            "title": "Test Days",
+            "type": "integer"
+          },
+          "train_days": {
+            "default": 120,
+            "minimum": 20.0,
+            "title": "Train Days",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "param"
+        ],
+        "title": "WalkForwardSpec",
+        "type": "object"
+      },
+      "WatchlistItemOut": {
+        "properties": {
+          "added_date": {
+            "format": "date",
+            "title": "Added Date",
+            "type": "string"
+          },
+          "change": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Change"
+          },
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "market": {
+            "title": "Market",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "previous_scan_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Previous Scan Date"
+          },
+          "previous_score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Previous Score"
+          },
+          "scan_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scan Date"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score"
+          }
+        },
+        "required": [
+          "code",
+          "name",
+          "market",
+          "added_date",
+          "scan_date",
+          "score",
+          "previous_scan_date",
+          "previous_score",
+          "change"
+        ],
+        "title": "WatchlistItemOut",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "mystock",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/alerts": {
+      "get": {
+        "description": "Alerts, newest first, filterable by kind, stock and read state.",
+        "operationId": "list_alerts_api_alerts_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "unread_only",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Unread Only",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "kind",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Kind"
+            }
+          },
+          {
+            "in": "query",
+            "name": "code",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Code"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "include_params",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Include Params",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertsResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Alerts",
+        "tags": [
+          "alerts"
+        ]
+      }
+    },
+    "/api/alerts/test": {
+      "post": {
+        "description": "Send a test message through every switched-on, configured outside channel.",
+        "operationId": "send_test_api_alerts_test_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Send Test",
+        "tags": [
+          "alerts"
+        ]
+      }
+    },
+    "/api/alerts/{alert_id}/read": {
+      "post": {
+        "operationId": "read_api_alerts__alert_id__read_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "alert_id",
+            "required": true,
+            "schema": {
+              "title": "Alert Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Read",
+        "tags": [
+          "alerts"
+        ]
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "operationId": "login_api_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Login",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "operationId": "logout_api_auth_logout_post",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Logout",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "operationId": "me_api_auth_me_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Me",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/backtests": {
+      "get": {
+        "description": "The latest runs, newest first, without their tables.",
+        "operationId": "list_runs_api_backtests_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/RunSummaryOut"
+                  },
+                  "title": "Response List Runs Api Backtests Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Runs",
+        "tags": [
+          "backtests"
+        ]
+      },
+      "post": {
+        "description": "Queue a backtest. It runs in the background: poll ``GET /backtests/{id}``.",
+        "operationId": "create_api_backtests_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BacktestRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunSummaryOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create",
+        "tags": [
+          "backtests"
+        ]
+      }
+    },
+    "/api/backtests/{run_id}": {
+      "delete": {
+        "operationId": "delete_run_api_backtests__run_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "run_id",
+            "required": true,
+            "schema": {
+              "title": "Run Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Delete Run",
+        "tags": [
+          "backtests"
+        ]
+      },
+      "get": {
+        "operationId": "get_run_api_backtests__run_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "run_id",
+            "required": true,
+            "schema": {
+              "title": "Run Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Run",
+        "tags": [
+          "backtests"
+        ]
+      }
+    },
+    "/api/backtests/{run_id}/preset": {
+      "post": {
+        "description": "Save the parameters of this run as a preset; with ``apply`` the screener uses them next.",
+        "operationId": "save_preset_api_backtests__run_id__preset_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "run_id",
+            "required": true,
+            "schema": {
+              "title": "Run Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PresetRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PresetResult"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Save Preset",
+        "tags": [
+          "backtests"
+        ]
+      }
+    },
+    "/api/backtests/{run_id}/report": {
+      "get": {
+        "description": "The run as a Markdown report (what was compared, how big the samples are, what failed).",
+        "operationId": "report_api_backtests__run_id__report_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "run_id",
+            "required": true,
+            "schema": {
+              "title": "Run Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Report",
+        "tags": [
+          "backtests"
+        ]
+      }
+    },
+    "/api/health": {
+      "get": {
+        "description": "DB connection, last quote update, data freshness warnings and notification channels.",
+        "operationId": "health_api_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Health",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/api/holdings": {
+      "get": {
+        "operationId": "list_holdings_api_holdings_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/HoldingOut"
+                  },
+                  "title": "Response List Holdings Api Holdings Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Holdings",
+        "tags": [
+          "holdings"
+        ]
+      },
+      "post": {
+        "description": "A-1: register a position. Its quantity is recorded as the 시작 수량.",
+        "operationId": "create_holding_api_holdings_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HoldingCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HoldingOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Holding",
+        "tags": [
+          "holdings"
+        ]
+      }
+    },
+    "/api/holdings/{holding_id}": {
+      "delete": {
+        "operationId": "delete_holding_api_holdings__holding_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "holding_id",
+            "required": true,
+            "schema": {
+              "title": "Holding Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Delete Holding",
+        "tags": [
+          "holdings"
+        ]
+      },
+      "put": {
+        "description": "Correct the quantity or average price (only while no cycle is open).",
+        "operationId": "update_holding_api_holdings__holding_id__put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "holding_id",
+            "required": true,
+            "schema": {
+              "title": "Holding Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HoldingUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HoldingOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Holding",
+        "tags": [
+          "holdings"
+        ]
+      }
+    },
+    "/api/holdings/{holding_id}/cycles": {
+      "get": {
+        "description": "Every sell/rebuy cycle with its 수량 증가분, and the running totals (A-9).",
+        "operationId": "list_cycles_api_holdings__holding_id__cycles_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "holding_id",
+            "required": true,
+            "schema": {
+              "title": "Holding Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CyclesResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Cycles",
+        "tags": [
+          "holdings"
+        ]
+      }
+    },
+    "/api/holdings/{holding_id}/cycles/{cycle_id}/abandon": {
+      "post": {
+        "description": "'사이클 포기': stop waiting to rebuy.",
+        "operationId": "abandon_cycle_api_holdings__holding_id__cycles__cycle_id__abandon_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "holding_id",
+            "required": true,
+            "schema": {
+              "title": "Holding Id",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "path",
+            "name": "cycle_id",
+            "required": true,
+            "schema": {
+              "title": "Cycle Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CycleOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Abandon Cycle",
+        "tags": [
+          "holdings"
+        ]
+      }
+    },
+    "/api/holdings/{holding_id}/cycles/{cycle_id}/retry": {
+      "post": {
+        "description": "'재매수 시도': an expired cycle waits for another window.",
+        "operationId": "retry_cycle_api_holdings__holding_id__cycles__cycle_id__retry_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "holding_id",
+            "required": true,
+            "schema": {
+              "title": "Holding Id",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "path",
+            "name": "cycle_id",
+            "required": true,
+            "schema": {
+              "title": "Cycle Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CycleOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Retry Cycle",
+        "tags": [
+          "holdings"
+        ]
+      }
+    },
+    "/api/holdings/{holding_id}/fills": {
+      "post": {
+        "description": "Record a sale or rebuy the user made. This is what moves the holding's state.",
+        "operationId": "record_fill_api_holdings__holding_id__fills_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "holding_id",
+            "required": true,
+            "schema": {
+              "title": "Holding Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FillCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FillResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Record Fill",
+        "tags": [
+          "holdings"
+        ]
+      }
+    },
+    "/api/screener/results": {
+      "get": {
+        "description": "Saved scan results by score. Defaults to the latest scan date.",
+        "operationId": "results_api_screener_results_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "scan_date",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Scan Date"
+            }
+          },
+          {
+            "in": "query",
+            "name": "min_score",
+            "required": false,
+            "schema": {
+              "default": 0.0,
+              "title": "Min Score",
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultsResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Results",
+        "tags": [
+          "screener"
+        ]
+      }
+    },
+    "/api/screener/run": {
+      "post": {
+        "description": "Scan the stored universe now and save the results (replacing that date's results).",
+        "operationId": "run_api_screener_run_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/RunRequest"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Run",
+        "tags": [
+          "screener"
+        ]
+      }
+    },
+    "/api/settings": {
+      "get": {
+        "description": "The current settings and the names of the saved presets.",
+        "operationId": "get_settings_api_settings_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Settings",
+        "tags": [
+          "settings"
+        ]
+      },
+      "put": {
+        "description": "Replace the current settings.",
+        "operationId": "put_settings_api_settings_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettingsDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Put Settings",
+        "tags": [
+          "settings"
+        ]
+      }
+    },
+    "/api/settings/presets": {
+      "post": {
+        "description": "Save the current parameters, bar length and cooldown as a preset (same name: replaced).",
+        "operationId": "save_preset_api_settings_presets_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PresetCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PresetInfo"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Save Preset",
+        "tags": [
+          "settings"
+        ]
+      }
+    },
+    "/api/settings/presets/{name}": {
+      "delete": {
+        "operationId": "delete_preset_api_settings_presets__name__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Delete Preset",
+        "tags": [
+          "settings"
+        ]
+      }
+    },
+    "/api/settings/presets/{name}/load": {
+      "post": {
+        "description": "Make a preset the current settings (channels and the polling period are kept).",
+        "operationId": "load_preset_api_settings_presets__name__load_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Load Preset",
+        "tags": [
+          "settings"
+        ]
+      }
+    },
+    "/api/stocks/{code}/candles": {
+      "get": {
+        "description": "The latest ``limit`` confirmed bars, oldest first.",
+        "operationId": "candles_api_stocks__code__candles_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "schema": {
+              "title": "Code",
+              "type": "string"
+            }
+          },
+          {
+            "description": "1d, 30m or 60m",
+            "in": "query",
+            "name": "bar",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/BarLength",
+              "default": "1d",
+              "description": "1d, 30m or 60m"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 200,
+              "maximum": 1000,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Candle"
+                  },
+                  "title": "Response Candles Api Stocks  Code  Candles Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Candles",
+        "tags": [
+          "stocks"
+        ]
+      }
+    },
+    "/api/stocks/{code}/indicators": {
+      "get": {
+        "description": "RSI, MACD, Bollinger, OBV and ATR over the same bars as ``/candles``, plus daily flow.",
+        "operationId": "indicators_api_stocks__code__indicators_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "schema": {
+              "title": "Code",
+              "type": "string"
+            }
+          },
+          {
+            "description": "1d, 30m or 60m",
+            "in": "query",
+            "name": "bar",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/BarLength",
+              "default": "1d",
+              "description": "1d, 30m or 60m"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 200,
+              "maximum": 1000,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IndicatorsResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Indicators",
+        "tags": [
+          "stocks"
+        ]
+      }
+    },
+    "/api/watchlist": {
+      "get": {
+        "description": "Watched stocks with their latest score and the change since the previous scan.",
+        "operationId": "list_items_api_watchlist_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/WatchlistItemOut"
+                  },
+                  "title": "Response List Items Api Watchlist Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Items",
+        "tags": [
+          "watchlist"
+        ]
+      },
+      "post": {
+        "description": "Watch a stock of the scan universe. 201 when added, 200 if it was already watched.",
+        "operationId": "add_api_watchlist_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Add Api Watchlist Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Add",
+        "tags": [
+          "watchlist"
+        ]
+      }
+    },
+    "/api/watchlist/{code}": {
+      "delete": {
+        "operationId": "remove_api_watchlist__code__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "schema": {
+              "title": "Code",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Remove",
+        "tags": [
+          "watchlist"
+        ]
+      }
+    }
+  }
+}

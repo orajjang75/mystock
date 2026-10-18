@@ -1,0 +1,232 @@
+:root {
+  /* set from src/theme/colors.ts at start-up; these are only the fallbacks */
+  --color-up: #f04452;
+  --color-down: #3485fa;
+  --color-flat: #8c8c8c;
+  --color-brand: #1677ff;
+  --rail-width: 76px;
+  font-family: system-ui, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Segoe UI', Roboto, sans-serif;
+}
+
+html,
+body,
+#root,
+.ant-app {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: #f5f6f8;
+  color: rgba(0, 0, 0, 0.88);
+}
+
+.centered-screen {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.login-card {
+  width: min(400px, calc(100vw - 32px));
+}
+
+.disclaimer {
+  text-align: center;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.45);
+  padding: 6px 12px;
+}
+
+/* --- mix layout: icon rail + tabs + content ---------------------------------------------- */
+
+.app-shell {
+  height: 100%;
+  display: flex;
+}
+
+.rail {
+  width: var(--rail-width);
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background: #001529;
+  padding: 8px 0;
+  overflow-y: auto;
+}
+
+.rail-logo {
+  align-self: center;
+  width: 36px;
+  height: 36px;
+  margin: 4px 0 12px;
+  border-radius: 8px;
+  background: var(--color-brand);
+  color: #fff;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rail-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 4px;
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  border-left: 3px solid transparent;
+}
+
+.rail-item:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.rail-item.active {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+  border-left-color: var(--color-brand);
+}
+
+.rail-icon {
+  font-size: 20px;
+  line-height: 1;
+  color: inherit;
+}
+
+.rail-item .ant-badge {
+  color: inherit;
+}
+
+.rail-label {
+  font-size: 11px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.rail-spacer {
+  flex: 1;
+}
+
+.rail-logout {
+  color: rgba(255, 255, 255, 0.65);
+  align-self: center;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  background: #fff;
+  border-bottom: 1px solid #e8e8e8;
+  padding: 6px 12px 0;
+}
+
+.screen-tabs {
+  flex: 1;
+  min-width: 0;
+}
+
+.screen-tabs .ant-tabs-nav {
+  margin: 0;
+}
+
+.header-status {
+  padding-bottom: 6px;
+  flex: none;
+}
+
+.content {
+  flex: 1;
+  overflow: auto;
+  padding: 16px;
+}
+
+.footer {
+  flex: none;
+  background: #fff;
+  border-top: 1px solid #e8e8e8;
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.settings-form {
+  max-width: 960px;
+}
+
+.settings-actions {
+  position: sticky;
+  bottom: -16px;
+  max-width: 960px;
+  margin: 16px 0 0;
+  padding: 12px 0;
+  background: #f5f6f8;
+  border-top: 1px solid #e8e8e8;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --rail-width: 56px;
+  }
+
+  .rail-label {
+    display: none;
+  }
+}
+
+/* Long condition tags wrap instead of running past the card on narrow screens. */
+.condition-bar .ant-tag {
+  max-width: 100%;
+  white-space: normal;
+  height: auto;
+  word-break: keep-all;
+}
+.condition-bar .ant-space-item {
+  max-width: 100%;
+}
+
+/* --- holdings and alerts -------------------------------------------------------------------- */
+
+.row-selected > td {
+  background: #e6f4ff !important;
+}
+
+/* Warnings read apart from ordinary alerts: a tinted row with an orange edge. */
+.alert-row-warning > td {
+  background: #fffbe6;
+}
+.alert-row-warning > td:first-child {
+  box-shadow: inset 3px 0 0 #fa8c16;
+}
+.alert-row-unread > td:first-child {
+  box-shadow: inset 3px 0 0 var(--color-brand);
+}
+
+/* An expanded alert row lives inside the table's horizontal scroll: pin it to the visible width. */
+.alert-evidence {
+  position: sticky;
+  left: 0;
+  width: calc(100vw - 96px);
+  max-width: 100%;
+}

@@ -1,0 +1,75 @@
+[project]
+name = "mystock-backend"
+version = "0.1.0"
+description = "KOSPI turnaround alert app - backend"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "sqlalchemy>=2.0",
+    "alembic>=1.13",
+    "psycopg[binary]>=3.2",
+    "pydantic-settings>=2.4",
+    "itsdangerous>=2.2",
+    "pandas>=3.0.6",
+    "tzdata>=2026.5",
+    "holidays>=0.106",
+    "apscheduler>=3.10,<4",
+    "httpx>=0.28.1",
+]
+
+[project.optional-dependencies]
+pykrx = [
+    "pykrx>=1.0.51",
+]
+# Signal-quality backtests (PRD 10장). 1.1.2 is the first vectorbt that works with pandas 3.
+# numba >= 0.66 needs an llvmlite that has no wheel for Intel Macs, so the extra is skipped
+# there and the backtest falls back to an equivalent pandas implementation (backtest/portfolio.py).
+backtest = [
+    "vectorbt==1.1.2; sys_platform != 'darwin' or platform_machine != 'x86_64'",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.6",
+    "mypy>=1.11",
+    "pandas-stubs>=3.0.5.260914",
+    "time-machine>=3.5.1",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = [".venv"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "C4", "RUF"]
+# Korean text and the math symbols of the PRD formulas (×, −) are intentional in docs.
+ignore = ["RUF001", "RUF002", "RUF003"]
+
+[tool.ruff.lint.per-file-ignores]
+# The report is Korean prose in f-strings; double-width characters make every line "long".
+"app/backtest/report.py" = ["E501"]
+"alembic/versions/*.py" = ["E501"]
+# The state tables read best with one scenario per line.
+"tests/services/test_holdings.py" = ["E501"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+plugins = ["pydantic.mypy"]
+files = ["app", "tests", "alembic", "e2e"]
+exclude = ["alembic/versions/"]
+
+[[tool.mypy.overrides]]
+module = ["apscheduler.*", "vectorbt.*"]
+ignore_missing_imports = true
