@@ -1,0 +1,2 @@
+# mystock
+my stock manager
