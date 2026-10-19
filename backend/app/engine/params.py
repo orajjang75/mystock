@@ -2,7 +2,7 @@
 
 The settings screen and API (PRD 7장, 9장) edit this same model, and every engine function takes
 its default arguments from here, so a default is defined exactly once. Percentages are in
-percent units (-30.0 means -30%); rates such as fees are fractions (0.0018 means 0.18%).
+percent units (-30.0 means -30%); rates such as fees are fractions (0.0020 means 0.20%).
 """
 
 from typing import Literal
@@ -123,9 +123,17 @@ class RebuyParams(_Params):
     min_confirmations: int = Field(2, ge=1)  # 반전 확인 3개 중 겹쳐야 하는 개수
     expiry_trading_days: int = Field(5, ge=1)  # A-7: 재매수 대기 만료
     target_gain: float = Field(0.01, ge=0)  # 목표 이득 1%
-    # 임시 기본값. 구현 시점의 공식 수수료율·거래세율로 11단계에서 확정한다 (PRD 10장 오픈 이슈).
-    round_trip_fee_rate: float = Field(0.0003, ge=0)  # 왕복 수수료
-    sell_tax_rate: float = Field(0.0018, ge=0)  # 매도 거래세
+    # 수수료·거래세 기본값 (PRD 10장 오픈 이슈), 2026-10-19 확인. 증권사와 우대 조건에 따라 다르므로
+    # 설정 화면에서 자기 요율로 바꿔야 한다.
+    # - 왕복 수수료 0.0354% = 한쪽 0.01769% x 2. 한쪽 = 한국투자증권 뱅키스 국내주식 온라인
+    #   0.0140527% + 유관기관제비용(한국거래소) 0.0036396%. 출처: 한국투자증권 수수료 안내
+    #   https://securities.koreainvestment.com/main/customer/guide/_static/TF04ae010000.jsp?tab=2
+    #   (2025.10.27 기준 표). 영업점 계좌의 온라인 수수료는 0.147%로 훨씬 높다.
+    # - 매도 거래세 0.20% = 2026-01-01 이후 양도분 세율. 코스피 증권거래세 0.05% + 농어촌특별세
+    #   0.15%, 코스닥 증권거래세 0.20%. 근거: 증권거래세법 시행령 제5조 개정(2025-12 시행령
+    #   개정). 확인한 자료: 머니투데이 2025-12-01 보도, DS투자증권 공지 2025-12-26.
+    round_trip_fee_rate: float = Field(0.000354, ge=0)  # 왕복 수수료
+    sell_tax_rate: float = Field(0.0020, ge=0)  # 매도 거래세
 
     @property
     def cost(self) -> float:

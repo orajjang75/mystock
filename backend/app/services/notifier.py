@@ -10,6 +10,7 @@ Telegram request URL contains the bot token.
 """
 
 import logging
+import time
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -50,26 +51,51 @@ class TelegramNotifier(Notifier):
         chat_id: str,
         client: httpx.Client | None = None,
         timeout: float = 10.0,
+        attempts: int = 3,
+        sleep: Callable[[float], None] = time.sleep,
     ) -> None:
         self._token = bot_token
         self._chat_id = chat_id
         self._client = client or httpx.Client(timeout=timeout)
+        self._attempts = attempts
+        self._sleep = sleep
 
     def send(self, notification: Notification) -> None:
+        """Send, retrying twice (0.5 s, 1 s) on a network error, HTTP 429 or a server error.
+
+        Telegram's ``Retry-After`` on a 429 is honoured up to five seconds. The last failure is
+        reported without a URL, because a Telegram request URL contains the bot token.
+        """
         url = f"{TELEGRAM_API}/bot{self._token}/sendMessage"
+        payload = {
+            "chat_id": self._chat_id,
+            "text": notification.text,
+            "disable_web_page_preview": True,
+        }
+        failure = "no attempt"
+        for attempt in range(self._attempts):
+            try:
+                response = self._client.post(url, json=payload)
+            except httpx.HTTPError as error:
+                failure = f"telegram request failed ({type(error).__name__})"
+                self._pause(attempt, None)
+                continue
+            if response.status_code == httpx.codes.OK:
+                return
+            failure = f"telegram rejected the message (HTTP {response.status_code})"
+            if response.status_code != 429 and response.status_code < 500:
+                break  # a bad token or chat id will not get better by asking again
+            self._pause(attempt, response.headers.get("retry-after"))
+        raise NotifierError(failure)
+
+    def _pause(self, attempt: int, retry_after: str | None) -> None:
+        if attempt + 1 >= self._attempts:
+            return
         try:
-            response = self._client.post(
-                url,
-                json={
-                    "chat_id": self._chat_id,
-                    "text": notification.text,
-                    "disable_web_page_preview": True,
-                },
-            )
-        except httpx.HTTPError as error:  # the error text would include the URL, i.e. the token
-            raise NotifierError(f"telegram request failed ({type(error).__name__})") from None
-        if response.status_code != httpx.codes.OK:
-            raise NotifierError(f"telegram rejected the message (HTTP {response.status_code})")
+            wait = min(float(retry_after), 5.0) if retry_after else 0.5 * 2**attempt
+        except ValueError:
+            wait = 0.5 * 2**attempt
+        self._sleep(wait)
 
 
 ChannelFactory = Callable[[Settings, httpx.Client | None], Notifier | None]

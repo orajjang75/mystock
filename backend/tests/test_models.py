@@ -27,8 +27,9 @@ PRD_TABLES = {
     "backtest_runs",
 }
 # Not a PRD 8장 table: PRD 10장 asks for the universe as ranked at each past date, so the daily
-# scan (and a backfill) store who was in it, with their rank and market cap.
-ADDED_TABLES = {"universe_snapshots"}
+# scan (and a backfill) store who was in it, with their rank and market cap. job_runs is the log of
+# every scheduled run that the 모의 운영 report (PRD 로드맵 5단계) is built from.
+ADDED_TABLES = {"universe_snapshots", "job_runs"}
 
 PRICES = {
     "open": Decimal("100"),

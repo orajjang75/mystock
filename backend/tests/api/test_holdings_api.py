@@ -6,6 +6,13 @@ from fastapi.testclient import TestClient
 CODE = "900010"
 
 
+def use_hand_rates(client: TestClient) -> None:
+    """The expected numbers below are worked out by hand with fixed rates (0.03% / 0.18%)."""
+    settings = client.get("/api/settings").json()
+    settings["signal_params"]["rebuy"].update(round_trip_fee_rate=0.0003, sell_tax_rate=0.0018)
+    assert client.put("/api/settings", json=settings).status_code == 200
+
+
 def create(client: TestClient, quantity: int = 100, avg_price: int = 90_000) -> dict[str, Any]:
     response = client.post(
         "/api/holdings", json={"code": CODE, "quantity": quantity, "avg_price": avg_price}
@@ -76,6 +83,7 @@ def test_invalid_registrations_are_rejected(
 def test_a_sale_moves_the_holding_to_rebuy_wait_with_the_target_price(
     market_client: TestClient,
 ) -> None:
+    use_hand_rates(market_client)
     holding = create(market_client)
 
     response = fill(market_client, holding["id"], "sell", 100_000, 30)
@@ -93,6 +101,7 @@ def test_a_sale_moves_the_holding_to_rebuy_wait_with_the_target_price(
 
 
 def test_the_full_cycle_gains_a_share_after_costs(market_client: TestClient) -> None:
+    use_hand_rates(market_client)
     holding = create(market_client)
     fill(market_client, holding["id"], "sell", 100_000, 30)
 

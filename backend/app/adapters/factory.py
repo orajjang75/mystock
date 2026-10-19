@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from app.adapters.base import MarketDataAdapter
+from app.adapters.base import AdapterUnavailableError, MarketDataAdapter
 from app.core.config import Settings, get_settings
 from app.core.market import KST, last_weekday
 
@@ -20,5 +20,26 @@ def get_adapter(settings: Settings | None = None) -> MarketDataAdapter:
             krx_pw=settings.krx_pw.get_secret_value() if settings.krx_pw else None,
         )
     from app.adapters.kis_adapter import KisAdapter
+    from app.adapters.kis_client import KisClient
+    from app.adapters.pykrx_adapter import PykrxAdapter
 
-    return KisAdapter()
+    pykrx = PykrxAdapter(
+        krx_id=settings.krx_id,
+        krx_pw=settings.krx_pw.get_secret_value() if settings.krx_pw else None,
+    )  # lists the stocks and their market caps, and fills the investor flow KIS no longer has
+
+    def client() -> KisClient:
+        if settings.kis_app_key is None or settings.kis_app_secret is None:
+            raise AdapterUnavailableError(
+                "KIS_APP_KEY and KIS_APP_SECRET are not set; the KIS adapter needs both."
+            )
+        return KisClient(
+            settings.kis_app_key.get_secret_value(),
+            settings.kis_app_secret.get_secret_value(),
+            env=settings.kis_env,
+            base_url=settings.kis_base_url,
+            max_rps=settings.kis_max_rps,
+            token_file=settings.kis_token_file,
+        )
+
+    return KisAdapter(client, listings_source=pykrx, history_source=pykrx)

@@ -16,10 +16,10 @@ from app.backtest.cycle_simulator import (
 )
 from app.core.market import KST, MARKET_CLOSE, MARKET_OPEN
 from app.db.enums import CycleState, HoldingState
-from app.engine.params import SignalParams
 from app.services import holdings as machine
+from tests.legacy_rates import HAND_PARAMS
 
-PARAMS = SignalParams()
+PARAMS = HAND_PARAMS
 
 
 def at(day: pd.Timestamp, clock: time) -> pd.Timestamp:

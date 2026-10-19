@@ -17,6 +17,20 @@ from app.core.config import Settings, get_settings
 MASK = "***"
 _MIN_LENGTH = 4  # shorter values would also mangle ordinary words
 
+# Secrets that only exist at run time, such as the access token a broker hands out. Everything
+# below masks them too, once added.
+_runtime: set[str] = set()
+
+
+def add_runtime_secret(value: str) -> None:
+    """Mask ``value`` from now on in logs and error messages."""
+    if len(value) >= _MIN_LENGTH:
+        _runtime.add(value)
+
+
+def forget_runtime_secrets() -> None:
+    _runtime.clear()
+
 
 def secret_values(settings: Settings) -> list[str]:
     """Every configured value that must never be shown, longest first."""
@@ -34,7 +48,7 @@ def secret_values(settings: Settings) -> list[str]:
         candidates.append(make_url(settings.database_url).password)
     except Exception:  # an unparsable URL has no password we could mask separately
         candidates.append(None)
-    found = {c for c in candidates if c and len(c) >= _MIN_LENGTH}
+    found = {c for c in [*candidates, *_runtime] if c and len(c) >= _MIN_LENGTH}
     return sorted(found, key=len, reverse=True)
 
 
@@ -52,15 +66,19 @@ class RedactingFilter(logging.Filter):
         super().__init__()
         self._secrets = list(secrets)
 
+    def _current(self) -> list[str]:
+        return sorted({*self._secrets, *_runtime}, key=len, reverse=True)
+
     def filter(self, record: logging.LogRecord) -> bool:
+        secrets = self._current()
         message = record.getMessage()
-        if any(secret in message for secret in self._secrets):
-            record.msg = redact(message, self._secrets)
+        if any(secret in message for secret in secrets):
+            record.msg = redact(message, secrets)
             record.args = None
         if record.exc_info:
             trace = logging.Formatter().formatException(record.exc_info)
-            if any(secret in trace for secret in self._secrets):
-                record.exc_text = redact(trace, self._secrets)  # handlers print exc_text as is
+            if any(secret in trace for secret in secrets):
+                record.exc_text = redact(trace, secrets)  # handlers print exc_text as is
         return True
 
 

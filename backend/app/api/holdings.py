@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, FastAPI, Request, Response, status
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
-from app.api.deps import DbSession, require_user
+from app.api.deps import DbSession, reject_in_paper_run, require_user
 from app.core.market import KST
 from app.db.enums import CycleState, FillSide, HoldingState
 from app.db.models import Cycle, Fill, Holding, Instrument
@@ -214,7 +214,11 @@ def delete_holding(holding_id: int, db: DbSession) -> Response:
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.post("/{holding_id}/fills", status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/{holding_id}/fills",
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(reject_in_paper_run)],
+)
 def record_fill(holding_id: int, body: FillCreate, db: DbSession) -> FillResponse:
     """Record a sale or rebuy the user made. This is what moves the holding's state."""
     result = service.record_fill(
@@ -264,7 +268,7 @@ def _single_cycle(db: DbSession, holding_id: int, cycle: Cycle) -> CycleOut:
     return _cycle_out(next(v for v in views if v.cycle.id == cycle.id))
 
 
-@router.post("/{holding_id}/cycles/{cycle_id}/retry")
+@router.post("/{holding_id}/cycles/{cycle_id}/retry", dependencies=[Depends(reject_in_paper_run)])
 def retry_cycle(holding_id: int, cycle_id: int, db: DbSession) -> CycleOut:
     """'재매수 시도': an expired cycle waits for another window."""
     cycle = service.retry_cycle(db, holding_id, cycle_id)
@@ -272,7 +276,7 @@ def retry_cycle(holding_id: int, cycle_id: int, db: DbSession) -> CycleOut:
     return _single_cycle(db, holding_id, cycle)
 
 
-@router.post("/{holding_id}/cycles/{cycle_id}/abandon")
+@router.post("/{holding_id}/cycles/{cycle_id}/abandon", dependencies=[Depends(reject_in_paper_run)])
 def abandon_cycle(holding_id: int, cycle_id: int, db: DbSession) -> CycleOut:
     """'사이클 포기': stop waiting to rebuy."""
     cycle = service.abandon_cycle(db, holding_id, cycle_id)

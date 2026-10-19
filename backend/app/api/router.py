@@ -6,6 +6,7 @@ from app.api import (
     backtests,
     health,
     holdings,
+    ops,
     screener,
     settings,
     stocks,
@@ -18,6 +19,7 @@ api_router.include_router(auth.router)
 api_router.include_router(backtests.router)
 api_router.include_router(health.router)
 api_router.include_router(holdings.router)
+api_router.include_router(ops.router)
 api_router.include_router(screener.router)
 api_router.include_router(settings.router)
 api_router.include_router(stocks.router)

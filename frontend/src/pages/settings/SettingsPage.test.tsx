@@ -60,8 +60,8 @@ describe('SettingsPage', { timeout: 20_000 }, () => {
   it('shows the saved settings', async () => {
     await open(makeSettings({ alert_cooldown_bars: 9 }))
 
-    expect(screen.getByLabelText('왕복 수수료율')).toHaveValue('0.03') // the stored 0.0003 shown as percent
-    expect(screen.getByLabelText('매도 거래세율')).toHaveValue('0.18')
+    expect(screen.getByLabelText('왕복 수수료율')).toHaveValue('0.0354') // the stored 0.000354 shown as percent
+    expect(screen.getByLabelText('매도 거래세율')).toHaveValue('0.20')
     expect(screen.getByLabelText('알림 쿨다운')).toHaveValue('9')
     expect(screen.getByRole('radio', { name: '60분봉' })).toBeChecked()
     expect(screen.getByRole('switch', { name: '자동 갱신' })).toBeChecked()

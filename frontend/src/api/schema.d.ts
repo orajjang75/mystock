@@ -336,6 +336,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/ops/report": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Report
+         * @description The 모의 운영 report: bar closes seen, collection failures and alert latency per day.
+         *
+         *     Default: the last 7 days up to today. ``format=md`` returns the same as Markdown.
+         */
+        get: operations["report_api_ops_report_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/screener/results": {
         parameters: {
             query?: never;
@@ -873,6 +895,12 @@ export interface components {
             /** Latest Intraday Bar */
             latest_intraday_bar?: string | null;
             /**
+             * Mode
+             * @default normal
+             * @enum {string}
+             */
+            mode: "normal" | "paper";
+            /**
              * Scheduler
              * @default disabled
              * @enum {string}
@@ -1096,7 +1124,7 @@ export interface components {
             min_confirmations: number;
             /**
              * Round Trip Fee Rate
-             * @default 0.0003
+             * @default 0.000354
              */
             round_trip_fee_rate: number;
             /**
@@ -1111,7 +1139,7 @@ export interface components {
             rsi_rebound_low: number;
             /**
              * Sell Tax Rate
-             * @default 0.0018
+             * @default 0.002
              */
             sell_tax_rate: number;
             /**
@@ -1575,10 +1603,10 @@ export interface components {
              *       "bollinger_support_level": 0,
              *       "expiry_trading_days": 5,
              *       "min_confirmations": 2,
-             *       "round_trip_fee_rate": 0.0003,
+             *       "round_trip_fee_rate": 0.000354,
              *       "rsi_rebound_high": 50,
              *       "rsi_rebound_low": 30,
-             *       "sell_tax_rate": 0.0018,
+             *       "sell_tax_rate": 0.002,
              *       "target_gain": 0.01
              *     }
              */
@@ -2457,6 +2485,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["FillResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    report_api_ops_report_get: {
+        parameters: {
+            query?: {
+                from?: string | null;
+                to?: string | null;
+                format?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
             /** @description Validation Error */

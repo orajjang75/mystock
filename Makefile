@@ -1,4 +1,4 @@
-.PHONY: install db-up db-down migrate scan ingest backfill-universe backtest gen-api dev dev-backend dev-frontend test e2e e2e-screener test-vectorbt lint format
+.PHONY: up down backup restore ops-report install db-up db-down migrate scan ingest backfill-universe backtest gen-api dev dev-backend dev-frontend test e2e e2e-screener test-vectorbt lint format
 
 BACKEND := backend
 FRONTEND := frontend
@@ -74,3 +74,21 @@ lint:
 
 format:
 	cd $(BACKEND) && uv run ruff check --fix . && uv run ruff format .
+
+# docker compose: the whole stack (backend, frontend, postgres) on http://localhost:$(WEB_PORT, default 8080).
+up:
+	docker compose up -d --build
+
+down:
+	docker compose down
+
+backup:
+	./scripts/backup.sh
+
+# make restore FILE=backups/mystock_YYYYMMDD_HHMMSS.dump
+restore:
+	./scripts/restore.sh $(FILE)
+
+# The 모의 운영 report for the last day, from the running stack.
+ops-report:
+	mkdir -p docs/ops-reports && docker compose exec -T backend python -m app.jobs.ops_report --days 1 > docs/ops-reports/$$(date +%F).md

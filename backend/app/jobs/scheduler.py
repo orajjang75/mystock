@@ -11,7 +11,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 
 from app.core.market import KST
-from app.jobs.monitor import JobContext, JobResult, run_daily_job, run_intraday_job
+from app.jobs.monitor import JobContext, JobResult, run_daily_job, run_intraday_job, run_logged
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +24,7 @@ INTRADAY_SECOND = 10
 def _guarded(name: str, job: Callable[[JobContext], JobResult], ctx: JobContext) -> None:
     """Run a job; whatever happens, the scheduler keeps going."""
     try:
-        result = job(ctx)
+        result = run_logged(ctx, name, job, now=None)
         if result.skipped:
             logger.info("%s job skipped: %s", name, result.skipped)
         else:

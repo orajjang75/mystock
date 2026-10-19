@@ -120,6 +120,21 @@ describe('AppLayout', () => {
     expect(screen.getByText(/지연 · \d\d:\d\d:\d\d/)).toBeInTheDocument()
   })
 
+  it('says so in a banner when the server runs in paper-run mode', async () => {
+    vi.mocked(endpoints.fetchHealth).mockResolvedValue(makeHealth({ mode: 'paper' }))
+
+    renderLayout()
+
+    expect(await screen.findByText(/모의 운영 중 · 신호와 알림만 받습니다/)).toBeInTheDocument()
+  })
+
+  it('shows no paper-run banner in normal mode', async () => {
+    renderLayout()
+    await screen.findByText(/정상/)
+
+    expect(screen.queryByText(/모의 운영 중/)).not.toBeInTheDocument()
+  })
+
   it('says so when the server cannot be reached', async () => {
     vi.mocked(endpoints.fetchHealth).mockRejectedValue(new Error('network'))
 

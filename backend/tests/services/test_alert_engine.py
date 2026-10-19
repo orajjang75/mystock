@@ -24,6 +24,7 @@ from app.services.settings import save_signal_bar_length
 from app.services.universe import load_universe
 from tests.alert_helpers import REBUY_FUNCTIONS, SELL_FUNCTIONS, force_sell_frame, pin
 from tests.conftest import AFTER_CLOSE
+from tests.legacy_rates import pin_hand_rates
 
 D = Decimal
 
@@ -120,6 +121,7 @@ def test_the_sell_alert_suggests_a_third_and_shows_the_rebuy_target(
     market: Session, monkeypatch: pytest.MonkeyPatch, code: str
 ) -> None:
     pin(monkeypatch, true={"rsi_overbought_exit", "macd_weakening"})
+    pin_hand_rates(market)
 
     (draft,) = [d for d in evaluate(market, hold(market, code, 100)) if d.kind == "sell"]
 
@@ -256,6 +258,7 @@ def test_the_rebuy_alert_suggests_the_quantity_the_proceeds_buy(
     market: Session, monkeypatch: pytest.MonkeyPatch, code: str
 ) -> None:
     pin(monkeypatch, true={"rsi_rebound", "macd_golden_cross"})
+    pin_hand_rates(market)
     price = last_close(market, code)
     holding = waiting_holding(market, code, price * 2)  # sold 30 shares at twice today's price
     sold_at = Decimal(str(round(price * 2, 2)))

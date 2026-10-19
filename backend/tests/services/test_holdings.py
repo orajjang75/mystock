@@ -12,6 +12,7 @@ from app.core.market import KST
 from app.db.enums import CycleState, FillSide, HoldingState, Market
 from app.db.models import Alert, Cycle, Fill, Holding, Instrument
 from app.services import holdings as svc
+from tests.legacy_rates import pin_hand_rates
 
 SOLD_AT = datetime(2026, 10, 16, 10, 30, tzinfo=KST)  # a Friday
 EXPIRY = datetime(2026, 10, 23, 15, 30, tzinfo=KST)  # five trading days later
@@ -66,6 +67,7 @@ class Scene:
 def scene(session: Session) -> Scene:
     session.add(Instrument(code="900010", name="모의", market=Market.KOSPI))
     session.flush()
+    pin_hand_rates(session)  # the hand-calculated costs below use fixed rates
     holding = svc.register(session, "900010", 100, D(90_000))
     return Scene(session, holding)
 

@@ -53,7 +53,9 @@ def test_telegram_posts_the_text_to_the_bot_api() -> None:
 
 @pytest.mark.parametrize("status_code", [400, 401, 403, 429, 500])
 def test_a_rejected_message_raises_without_the_token(status_code: int) -> None:
-    notifier = TelegramNotifier(TOKEN, "42", client_for(lambda r: httpx.Response(status_code)))
+    notifier = TelegramNotifier(
+        TOKEN, "42", client_for(lambda r: httpx.Response(status_code)), sleep=lambda _s: None
+    )
 
     with pytest.raises(NotifierError) as error:
         notifier.send(Notification("sell", "hello"))
@@ -66,7 +68,7 @@ def test_a_network_failure_raises_without_the_url_or_token() -> None:
     def handler(request: httpx.Request) -> httpx.Response:
         raise httpx.ConnectError(f"cannot reach {request.url}")
 
-    notifier = TelegramNotifier(TOKEN, "42", client_for(handler))
+    notifier = TelegramNotifier(TOKEN, "42", client_for(handler), sleep=lambda _s: None)
 
     with pytest.raises(NotifierError) as error:
         notifier.send(Notification("sell", "hello"))
@@ -82,7 +84,79 @@ def test_a_timeout_is_a_notifier_error_too() -> None:
         raise httpx.ReadTimeout("slow", request=request)
 
     with pytest.raises(NotifierError, match="ReadTimeout"):
-        TelegramNotifier(TOKEN, "42", client_for(handler)).send(Notification("sell", "x"))
+        TelegramNotifier(TOKEN, "42", client_for(handler), sleep=lambda _s: None).send(
+            Notification("sell", "x")
+        )
+
+
+# --- retries -------------------------------------------------------------------------------------
+
+
+def flaky(*answers: httpx.Response) -> tuple[httpx.Client, list[int]]:
+    calls: list[int] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls.append(1)
+        return answers[min(len(calls), len(answers)) - 1]
+
+    return client_for(handler), calls
+
+
+def test_a_server_error_is_retried_and_the_message_still_arrives() -> None:
+    client, calls = flaky(
+        httpx.Response(503), httpx.Response(502), httpx.Response(200, json={"ok": True})
+    )
+    pauses: list[float] = []
+
+    TelegramNotifier(TOKEN, "42", client, sleep=pauses.append).send(Notification("sell", "x"))
+
+    assert len(calls) == 3
+    assert pauses == [0.5, 1.0]
+
+
+def test_a_rate_limit_answer_waits_as_long_as_telegram_asks() -> None:
+    client, calls = flaky(
+        httpx.Response(429, headers={"retry-after": "2"}), httpx.Response(200, json={"ok": True})
+    )
+    pauses: list[float] = []
+
+    TelegramNotifier(TOKEN, "42", client, sleep=pauses.append).send(Notification("sell", "x"))
+
+    assert pauses == [2.0] and len(calls) == 2
+
+
+def test_it_gives_up_after_three_attempts_and_reports_the_last_failure() -> None:
+    client, calls = flaky(httpx.Response(500))
+
+    with pytest.raises(NotifierError, match="HTTP 500"):
+        TelegramNotifier(TOKEN, "42", client, sleep=lambda _s: None).send(Notification("sell", "x"))
+
+    assert len(calls) == 3
+
+
+def test_a_wrong_token_or_chat_is_not_asked_again() -> None:
+    client, calls = flaky(httpx.Response(401))
+
+    with pytest.raises(NotifierError, match="HTTP 401"):
+        TelegramNotifier(TOKEN, "42", client, sleep=lambda _s: None).send(Notification("sell", "x"))
+
+    assert len(calls) == 1
+
+
+def test_a_network_error_is_retried() -> None:
+    state = {"n": 0}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        state["n"] += 1
+        if state["n"] == 1:
+            raise httpx.ConnectError("down", request=request)
+        return httpx.Response(200, json={"ok": True})
+
+    TelegramNotifier(TOKEN, "42", client_for(handler), sleep=lambda _s: None).send(
+        Notification("sell", "x")
+    )
+
+    assert state["n"] == 2
 
 
 # --- which channels are used ---------------------------------------------------------------------

@@ -11,9 +11,19 @@ export function HealthBanner() {
   if (data?.status === 'error') {
     return <Alert banner type="error" message="데이터베이스에 연결할 수 없습니다." />
   }
-  if (!data || data.warnings.length === 0) return null
+  if (!data) return null
+  const paper = data.mode === 'paper'
+  if (!paper && data.warnings.length === 0) return null
   return (
     <>
+      {paper && (
+        <Alert
+          banner
+          type="info"
+          message="모의 운영 중 · 신호와 알림만 받습니다"
+          description="체결 기록과 재매수 시도·사이클 포기는 받지 않습니다. 일별 리포트는 /api/ops/report 에서 봅니다."
+        />
+      )}
       {data.warnings.map((warning) => (
         <Alert
           key={warning.source}

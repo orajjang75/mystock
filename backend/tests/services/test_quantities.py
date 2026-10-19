@@ -6,8 +6,9 @@ import pytest
 
 from app.engine.params import RebuyParams
 from app.services import quantities as q
+from tests.legacy_rates import HAND_REBUY
 
-DEFAULT = RebuyParams()
+DEFAULT = HAND_REBUY
 FREE = RebuyParams(round_trip_fee_rate=0, sell_tax_rate=0)
 
 

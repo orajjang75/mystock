@@ -1,3 +1,5 @@
+# Everything at once:  docker compose up -d --build   ->  http://localhost:8080
+# Settings come from .env (copy .env.example). Only the backend and postgres need them.
 services:
   postgres:
     image: postgres:16
@@ -17,5 +19,37 @@ services:
       timeout: 3s
       retries: 10
 
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      # Inside the compose network the database is the `postgres` service, not localhost.
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-mystock}:${POSTGRES_PASSWORD:-mystock}@postgres:5432/${POSTGRES_DB:-mystock}
+      # The jobs run inside this one process. Never scale it past one replica or worker.
+      SCHEDULER_ENABLED: "true"
+      KIS_TOKEN_FILE: /data/kis_token.json
+      TZ: Asia/Seoul
+    volumes:
+      - appdata:/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://localhost:8000/api/health', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "${WEB_PORT:-8080}:80"
+
 volumes:
   pgdata:
+  appdata:

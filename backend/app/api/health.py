@@ -47,6 +47,7 @@ class HealthResponse(BaseModel):
     collection: dict[str, SourceHealth] = {}
     channels: dict[str, ChannelHealth] = {}
     scheduler: Literal["running", "disabled"] = "disabled"
+    mode: Literal["normal", "paper"] = "normal"  # paper: 모의 운영, no fills are accepted
 
 
 @router.get("/health")
@@ -71,7 +72,12 @@ def health(db: DbSession, response: Response, request: Request, now: Now) -> Hea
         # Log the exception type only: the message can embed the connection URL.
         logger.error("health check: database error (%s)", type(exc).__name__)
         response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
-        return HealthResponse(status="error", db="error", scheduler=running)
+        return HealthResponse(
+            status="error",
+            db="error",
+            scheduler=running,
+            mode="paper" if settings.paper_run else "normal",
+        )
 
     updates = [t for t in (last_daily_update, last_intraday_update) if t is not None]
     return HealthResponse(
@@ -91,4 +97,5 @@ def health(db: DbSession, response: Response, request: Request, now: Now) -> Hea
             c.name: ChannelHealth(enabled=c.enabled, configured=c.configured) for c in channels
         },
         scheduler=running,
+        mode="paper" if settings.paper_run else "normal",
     )

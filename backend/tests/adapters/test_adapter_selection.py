@@ -45,12 +45,3 @@ def test_pykrx_adapter_explains_how_to_install_pykrx() -> None:
 def test_pykrx_has_no_intraday_bars() -> None:
     with pytest.raises(NotImplementedError):
         PykrxAdapter().fetch_intraday_30m("005930", DAY, DAY)
-
-
-def test_kis_adapter_is_a_placeholder_until_step_11() -> None:
-    adapter = KisAdapter()
-
-    with pytest.raises(NotImplementedError, match="step 11"):
-        adapter.fetch_intraday_30m("005930", DAY, DAY)
-    with pytest.raises(NotImplementedError):
-        adapter.fetch_daily_ohlcv("005930", DAY, DAY)

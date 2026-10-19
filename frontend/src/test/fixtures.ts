@@ -32,6 +32,7 @@ export function makeSettings(overrides: Partial<SettingsResponse> = {}): Setting
 export function makeHealth(overrides: Partial<HealthResponse> = {}): HealthResponse {
   return {
     status: 'ok',
+    mode: 'normal',
     db: 'ok',
     last_quote_update: '2026-10-16T18:00:10+09:00',
     last_daily_update: '2026-10-16T18:00:10+09:00',

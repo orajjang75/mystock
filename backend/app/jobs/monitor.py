@@ -23,7 +23,7 @@ from app.db.enums import BarLength
 from app.db.models import Holding
 from app.jobs.daily_scan import run_daily_scan
 from app.jobs.ingest import ingest_intraday_30m
-from app.services import status
+from app.services import ops, status
 from app.services.alert_engine import AlertDraft, evaluate_all, process_expirations
 from app.services.alerts import save_drafts
 from app.services.freshness import FreshnessReport, evaluate_freshness
@@ -195,3 +195,65 @@ def _collect_daily(session: Session, ctx: JobContext, now: datetime) -> bool:
     except Exception as error:
         _record_failure(session, "daily", now, error)
         return False
+
+
+# --- the run log -------------------------------------------------------------------------------
+
+
+def _outcome(result: JobResult) -> str:
+    if result.skipped:
+        return "skipped"
+    return "stale" if result.stale or not result.collected else "ok"
+
+
+def run_logged(
+    ctx: JobContext, name: str, job: Callable[[JobContext], JobResult], now: datetime | None = None
+) -> JobResult:
+    """Run ``job`` and write what happened to ``job_runs``, for the 모의 운영 report.
+
+    The scheduler calls this instead of the job itself. An exception is logged as a ``failed``
+    run and raised again, so the scheduler's own handling is unchanged.
+    """
+    started = (now or ctx.clock()).astimezone(KST)
+    scheduled = (
+        ops.floor_30(started)
+        if name == "intraday"
+        else datetime.combine(started.date(), ctx.settings.daily_scan_time, tzinfo=KST)
+    )
+    try:
+        result = job(ctx)
+    except Exception as error:
+        _log_run(
+            ctx, name, scheduled, started, "failed", {"error": f"{type(error).__name__}: {error}"}
+        )
+        raise
+    detail: dict[str, object] = {
+        "collected": result.collected,
+        "stale": result.stale,
+        "saved": result.saved,
+        "suppressed": result.suppressed,
+        "skipped": result.skipped,
+    }
+    outcome = _outcome(result)
+    if outcome == "stale":
+        with ctx.session_factory() as session:
+            detail["error"] = ops.last_error(session, name)
+    _log_run(ctx, name, scheduled, started, outcome, detail)
+    return result
+
+
+def _log_run(
+    ctx: JobContext,
+    name: str,
+    scheduled: datetime,
+    started: datetime,
+    outcome: str,
+    detail: dict[str, object],
+) -> None:
+    try:
+        with ctx.session_factory() as session:
+            ops.record_run(
+                session, name, scheduled, started, ctx.clock().astimezone(KST), outcome, detail
+            )
+    except Exception:  # the log must never be the reason a job fails
+        logger.exception("could not write the %s run log", name)

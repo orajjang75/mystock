@@ -228,6 +228,22 @@ class Fill(Base):
     tax: Mapped[Decimal] = mapped_column(Price, server_default="0")
 
 
+class JobRun(Base):
+    """한 번의 예약 작업 실행 기록. 모의 운영 리포트(봉 누락, 수집 실패, 알림 지연)의 원자료."""
+
+    __tablename__ = "job_runs"
+    __table_args__ = (Index("ix_job_runs_job_scheduled_for", "job", "scheduled_for"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    job: Mapped[str] = mapped_column(String(10))  # intraday | daily
+    # The bar close (intraday) or the scan time (daily) this run was for.
+    scheduled_for: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    finished_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    outcome: Mapped[str] = mapped_column(String(10))  # ok | skipped | stale | failed
+    detail: Mapped[dict[str, Any]] = mapped_column(JSONType, default=dict)
+
+
 class UniverseSnapshot(Base):
     """시점별 스캔 대상 (시가총액 순위). 백테스트가 과거 시점 기준 유니버스를 쓰도록 쌓아 둔다."""
 
@@ -273,6 +289,7 @@ __all__ = [
     "IndexDaily",
     "Instrument",
     "InvestorFlowDaily",
+    "JobRun",
     "OhlcvDaily",
     "OhlcvIntraday",
     "ScanResult",

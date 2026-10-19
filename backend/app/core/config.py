@@ -31,8 +31,18 @@ class Settings(BaseSettings):
     # Broker and notification secrets: environment variables only, never logged or returned.
     kis_app_key: SecretStr | None = None
     kis_app_secret: SecretStr | None = None
+    kis_env: Literal["real", "paper"] = "real"  # 실전 or 모의투자 server of the KIS Open API
+    # Requests per second to KIS. None: 10 on the real server (KIS allows about 20) and 2 on the
+    # paper server. Keep it well below the limit: going over only costs a retry, a ban a day.
+    kis_max_rps: float | None = Field(default=None, gt=0)
+    kis_base_url: str | None = None  # override the server of ``kis_env`` (tests, proxies)
+    # The access token is valid for a day and may be issued once a minute, so it is kept in a
+    # file (mode 600) to survive restarts. Empty: keep it in memory only.
+    kis_token_file: str | None = "~/.mystock/kis_token.json"
     telegram_bot_token: SecretStr | None = None
     telegram_chat_id: str | None = None
+    # 모의 운영 (PRD 로드맵 5단계): real market data, signals and alerts, but no fills are accepted.
+    paper_run: bool = False
     # Run the APScheduler jobs inside the API process (one worker only).
     scheduler_enabled: bool = False
     session_max_age_seconds: int = 60 * 60 * 24 * 7

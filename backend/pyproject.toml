@@ -59,9 +59,12 @@ ignore = ["RUF001", "RUF002", "RUF003"]
 [tool.ruff.lint.per-file-ignores]
 # The report is Korean prose in f-strings; double-width characters make every line "long".
 "app/backtest/report.py" = ["E501"]
+"app/services/ops.py" = ["E501"]
 "alembic/versions/*.py" = ["E501"]
 # The state tables read best with one scenario per line.
 "tests/services/test_holdings.py" = ["E501"]
+# Reuses the mock-clock `world` fixture from the monitor tests, which looks like a redefinition.
+"tests/services/test_ops.py" = ["E501", "F401", "F811"]
 
 [tool.mypy]
 python_version = "3.11"
